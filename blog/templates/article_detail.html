@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ post.title_tag }}{% endblock %}
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <small>By: {{ post.auther.first_name }}
+        {{ post.auther.last_name }}
+    </small><br/>
+    <hr>
+    <br/>
+    {% if post.header_image %}
+        <img src='{{ post.header_image.url }}'>
+    {% endif %}
+    {{ post.body | safe }}
+
+    <br/><br/>
+    {% if user.is_authenticated %}
+        {% if user.id == post.auther.id %}
+            <a href="{% url 'update-post' post.pk %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'delete-post' post.pk %}" class="btn btn-secondary">Delete</a>
+        {% endif %}
+    {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+    <hr>
+
+    <form action="{% url 'like_post' post.pk %} " method="post">
+        {% csrf_token %}
+        {% if user.is_authenticated %}
+            {% if liked %}
+                <button class="btn btn-danger" type="submit" name="post_id" value="{{ post.id }}">Unlike</button>
+
+            {% else %}
+                <button class="btn btn-secondary" type="submit" name="post_id" value="{{ post.id }}">Like</button>
+
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}">login</a> to like</p>
+        {% endif %}
+        - {{ total_likes }}
+    </form>
+
+    <h2>Comments</h2>
+    {% if not post.comments.all %}
+        No Comment Yet <a href="{% url 'add_comment' post.id %}">Add one</a>
+    {% else %}
+        <a href="{% url 'add_comment' post.id %}">Add comment</a><br/><br/>
+        {% for comment in post.comments.all %}
+            {{ comment.name }} - {{ comment.date_added }}
+            <br/>
+            {{ comment.body }}
+            <hr>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card" style="width: 18rem;">
+        {% if post.auther.profile.profile_pic %}
+            <img class="card-img-top" src="{{ post.auther.profile.profile_pic.url }}" alt="Card image cap">
+        {% else %}
+            <img class="card-img-top" src="{% static 'blog/images/face.jpg' %}" alt="Card image cap">
+        {% endif %}
+        <div class="card-body">
+            {% if post.auther.profile.bio %}
+                <p class="card-text">{{ post.auther.profile.bio }}</p>
+            {% else %}
+                <p>This is a lazy guy</p>
+            {% endif %}
+            {% if post.auther.profile.bio %}
+                <p><a href="{{ post.auther.profile.website_url }}" target="_blank">Website</a></p>
+            {% else %}
+                <p>There is no website</p>
+            {% endif %}
+            {% if post.auther.profile.bio %}
+                <p><a href="{{ post.auther.profile.github_url }}" target="_blank">GitHub</a></p>
+            {% else %}
+                <p>There is no GitHub</p>
+            {% endif %}
+            {% if post.auther.profile.id %}
+                <p><a href="{% url 'show_profile_page' post.auther.profile.id %}">Profile</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+{% endblock %}
