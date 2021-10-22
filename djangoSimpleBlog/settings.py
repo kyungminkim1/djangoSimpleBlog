@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'djangoSimpleBlog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'd74n15lbs862iu',
-            'USER': 'qvrwhmblakblra',
-            'PASSWORD': 'c7d53f2d23264705a0ca5d9064f84c4d5bb3c8432f17d49ef2723459b5b30b4c',
-            'HOST': 'ec2-34-228-100-83.compute-1.amazonaws.com',
+            'NAME': 'dbe9t2r4pai770',
+            'USER': 'ynwitckjykrqrf',
+            'PASSWORD': 'cfff0c417c6f0ec3083f060e89be91d0e1ec99370c31b7484fd0aa1a1859369a',
+            'HOST': 'ec2-3-212-168-103.compute-1.amazonaws.com',
             'PORT': '5432',
     }
 }
